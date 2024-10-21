@@ -1,7 +1,8 @@
 class Mastermind
   require 'colorize'
 
-  require_relative 'code'
+  require_relative 'lib/code'
+  require_relative 'lib/peg'
 
   def initialize
     @code = Code.new
@@ -45,4 +46,4 @@ end
 
 g = Mastermind.new
 
-g.start_game
+p = Peg.new
