@@ -1,12 +1,10 @@
 class Peg
   #require colorize for coloring the text
   require 'colorize'
-  attr_accessor :colour, :position
-  def initialize(t, p)
+  attr_accessor :text
+  def initialize(t)
     #@text is the character representing the colour (ie R = Red)
     @text = t
-    #position in the code (1st, 2nd, 3rd, 4th)
-    @position = p 
   end
 
   def to_s
