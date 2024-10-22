@@ -11,7 +11,7 @@ class Turn
 
   def to_s
     # will return something like > Turn 0: RGBY(colored) B: 1 W: 2
-    "Turn: #{@turn}:  #{color(@guess)}  B: #{@black_flags}  W: #{@white_flags}"
+    "Turn: #{@turn}:   #{color(@guess)}  B: #{@black_flags}  W: #{@white_flags}"
   end
 
   def color(text)
