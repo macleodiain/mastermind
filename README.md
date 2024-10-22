@@ -3,6 +3,9 @@ Mastermind - The Odin Project
 Creating the popular game Mastermind in ruby as part of The Odin Project.
 Full description of task available at https://www.theodinproject.com/lessons/ruby-mastermind
 
+Update 2:
+I have implemented a bare minimum implementation of play against the computer.  The computer makes randomised guesses each turn.
+Will consider expanding this to use some sort of rule to allow the comp to make better decisions.
 
 Update:
 I have refactored the game from top to bottom after thinking it through properly.
