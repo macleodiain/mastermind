@@ -1,88 +1,55 @@
 class Mastermind
-  require 'colorize'
 
-  require_relative 'lib/code'
-  require_relative 'lib/peg'
+  require_relative 'lib/standard_game'
 
   def initialize
-    @code = Code.new
-    start_game
+    begin
+    menu
+  rescue Interrupt => e
+    puts "\nExiting Game"
+    exit
   end
-    
-  def start_game
-    puts "Welcome to Mastermind"
-    puts "The computer has devised a devilish code and you must try to crack it."
-    puts "You must choose four colours each turn and will receive feedback showing how close your guess was"
-    puts "Enter may choose yourguess from the options below:"
-    puts "#{"R - Red".colorize(:red)} #{"G - Green".colorize(:green)} #{"B - Blue".colorize(:blue)} #{"Y - Yellow".colorize(:yellow)} #{"P - Pink".colorize(:magenta)} #{"O - Orange".colorize(:light_red)} "
-    puts "E.G. If you want to choose Blue Blue Green Red, you would enter BBGY"
-    #tracks how many turns you have had
-    turn_counter = 0
-    #if you hit 10 turns without guessing - you lose
-    while turn_counter <=10
-      #get the users guess - turn counter is passed to get guess so on the first turn it does not try to print the guess history
-      guess = get_guess(turn_counter)
-      # .check returns a hash with :black_flags and :white_flags as keys, numbers as values
-      result = @code.check(guess)
-      turn_counter +=1
-      
-      #if you get the code, you win and game ends
-      if result[:black_flags] == 4
-        puts "CODE CRACKED!  YOU WIN!"
-        exit
-      end
-      #print out the flag info to inform their next guess
-      puts "Black Flags:  #{result[:black_flags]}"
-      puts "White Flags: #{result[:white_flags]}"
-    end
-    #If you dont get the code after ten turns you lose
-    puts "GAME OVER - TOO MANY ATTEMPTS"
-    puts "The code was #{@code.code.join}"
   end
 
-  def get_guess(turn_counter)
-    puts "Please enter your guess"
-    continue = false
-    guess = ""
-    while continue == false
-       colours = ["R", "G", "B", "Y", "P", "O"]
-      check_count = 0
-      guess = gets.chomp.upcase.split("")
-      guess.each do |letter|
-        if colours.any?{|colour| colour == letter}
-          check_count +=1
-        end
-      end
-      if check_count == 4  
-        continue = true
-      else
-       puts "Your code was #{guess.join}"
-       puts "This is an invalid code"
-      end
+  def menu
+    puts "Welcome to Mastermind"
+    
+    puts "Choose option:"
+    puts "1:  Play standard game vs computer"
+    puts "2:  Play game as codemaker against computer"
+    puts "3:  How to play"
+    puts "Enter ctrl + c at any time to quit"
+
+    case gets.chomp
+    when "1"
+      StandardGame.new
+    when "2"
+      CodemakerGame.new
+    when "3"
+      info
+    else
+      puts "invalid input - try again"
+      menu
     end
-    #clear the screen to get rid of clutter
-    puts `clear`
-    #dont print guess history on turn one (there is no guess history yet)
-    if turn_counter > 0
-      print_history(@code.history)
-    end
-    #show what the chosen guess was
-    print "Your guess was:"
-    @code.text_to_pegs(guess).each do |peg|
-      print "#{peg} "
-    end
-    print "\n"
-    @code.text_to_pegs(guess)
   end
-  #print out the previous guesses
-  def print_history(history)
-    puts "Previous guesses /  results"
-    history.each do |guess, result|
-      puts "#{guess.join} - #{result}" 
-    end
+
+  def info
+    puts "How to play:"
+    puts "In a standard game, the computer will create a secret code and the user must try to guess that code."
+    puts "Each time the user makes a guess, the computer will give you clues about how close your guess is in the form of Black and White flags"
+    puts "A black flag means one of your chosen colours is in the code and in the correct place.  i.e. if the code is RGBY and you guess ROOO you would get one black flag for the R as it is in the correct place"
+    puts "A white flag means one of your chosen colours is in the code but not in the right place ie.e if the code is RGBY and you guess OOOR you would get one white flag for the R as it is in the code but not in the correct place"
+    puts "The code and your guesses are always 4 characters.  Valid characters are RGBYOP, representing red green blue yellow orange and pink"
+    puts "You have ten turns to guess the code"
+    puts "\n =========================================================================\n"
+    puts "In a codemaker game, you will choose the code and the computer will try to break it.  The same rules as above will apply"
+    puts "\n"
+
+    menu
+
+
   end
 
 end
 
-g = Mastermind.new
-
+Mastermind.new
