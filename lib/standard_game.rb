@@ -6,14 +6,11 @@ class StandardGame
   def initialize
     #creates a code object which generates the code to break and has logic for checking guesses against code
     @code = Code.new
+    @game_type = "standard"
     puts `clear`
     puts "The code has been set!  Good luck!\n\n"
     #this method controls game flow
-    
-      run_game
-    
-    
-    
+      run_game 
   end
 
   def run_game
@@ -26,6 +23,7 @@ class StandardGame
     continue = true
     while continue
       #get guess from user
+      puts "Please enter your guess:"
       guess = get_guess
       #clear the screen
       puts `clear`
@@ -52,7 +50,7 @@ class StandardGame
 
   def get_guess
     #gets and validates user input
-    puts "Please enter your guess:"
+    
     continue = false
     guess = ""
     while continue == false
@@ -60,12 +58,8 @@ class StandardGame
       check_count = 0
       guess = gets.chomp.upcase.split("")
       #if all letters supplied are in the allowed characters list it is a valid guess
-      if guess.all?{|letter|allowed_characters.include?(letter)}
-        if guess.length > 4
-          #added this as i noticed entering an allowed character more than four times would pass the above check
-          #i.e RGBYRGBYRGBYRGBY is all valid characters. Only the first four characters are taken
-          guess = guess[0..3]
-        end
+      if guess.all?{|letter|allowed_characters.include?(letter)} && guess.length == 4 
+        
         continue = true
       else
           #If you enter an invalid string
@@ -115,21 +109,29 @@ class StandardGame
     end
   end
 
-  def game_end(wincon, history)
-    #win or lose end game
-    if wincon == "win"
-      puts "Congratulations, you broke the code!"
-    else
-      puts "Unlucky, you ran out of turns"
+  def game_end(wincon, previous_turns)
+    if @game_type == "standard"
+      if wincon == "win"
+        puts "Congratulations, you broke the code!"
+      else
+        puts "Unlucky, you ran out of turns"
+      end
+     
+    elsif @game_type == "codemaker"
+      if wincon == "win"
+        puts "Congratulations!  The computer was unable to crack your code!"
+      else
+        puts "Unlucky!  The computer cracked your code."
     end
-    puts "The code was #{color(@code.code)}"
-    print_history(history)
-    exit
-  end
     
-
-
-      
+    end
+    
+    puts "The code was #{color(@code.code)}"
+    print_previous_turns(previous_turns)
+    exit
+   
+  end
+       
 end
 
 

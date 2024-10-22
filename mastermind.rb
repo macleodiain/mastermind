@@ -1,6 +1,7 @@
 class Mastermind
 
   require_relative 'lib/standard_game'
+  require_relative 'lib/codemaker_game'
 
   def initialize
     begin
