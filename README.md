@@ -3,6 +3,10 @@ Mastermind - The Odin Project
 Creating the popular game Mastermind in ruby as part of The Odin Project.
 Full description of task available at https://www.theodinproject.com/lessons/ruby-mastermind
 
+
+Update 4: 
+improved comp_guess method, any white flagged letters get added to an array and then in the next turn the comp chooses randomly from that array instead of the full list of letters.  The computer can now break the code most games.
+
 Update 3:
 Added comp_guess method in Code.
 This allows the comp to save any black flags (correct colour + correct position) and it will guess that color in that position for all future guesses.  Any unknowns are randomly guessed.
