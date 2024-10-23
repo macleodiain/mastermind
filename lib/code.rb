@@ -9,6 +9,7 @@ class Code
               user_selected_code
             end
     @known_letters = Array.new(4, nil)
+    @white_flagged_letters = Array.new
   end
 
   def create_code
@@ -35,6 +36,7 @@ class Code
       # if the letter is not a black flag but does occur in the code you have a white flag
       elsif @code.join.include?(user_guess[index])
         results[:white_flags] += 1
+        @white_flagged_letters.push(letter)
       end
       # history is a hash to store previous guesses keys are previous guesses and values are results from those guesses
       #  @history[user_guess] = "B: #{results[:black_flags]} W: #{results[:white_flags]}" DEBUGGING
@@ -47,11 +49,16 @@ class Code
     # generates a guess for the computer.
     # if in previous rounds, the computer has discovered a letter in the correct position(black flag)
     # then that is saved (in @known_letters) and the comp will always have that letter in that position.
+    # this has now been extended to include white flags. If a white flag is discovered that letter will always be in the next guess
     guess = Array.new(4, nil)
     allowed_characters = %w[R G B Y P O]
     @known_letters.each_with_index do |letter, index|
       guess[index] = if letter.nil?
-                       allowed_characters[rand(0..5)]
+                        if @white_flagged_letters.empty?
+                          allowed_characters[rand(0..5)]
+                        else
+                          @white_flagged_letters.delete_at(rand(0..(@white_flagged_letters.length-1)))
+                        end
                      else
                        @known_letters[index]
                      end
